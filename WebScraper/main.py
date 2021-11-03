@@ -1,9 +1,10 @@
 import requests
 from Scoring.score import score
-from Data.sources import read_url_file
+from Data.sources import read_file
 from bs4 import BeautifulSoup
 
-urls = read_url_file('urls.txt')
+urls = read_file('urls.txt')
+keywords = read_file('keywords.txt')
 
 
 def scrape(source_url):
@@ -14,5 +15,5 @@ def scrape(source_url):
 
 
 scraped = scrape(urls[0])
-article_score = score(scraped)
+article_score = score(scraped, keywords)
 print(article_score)

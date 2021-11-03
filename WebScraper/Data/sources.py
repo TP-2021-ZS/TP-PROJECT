@@ -1,4 +1,4 @@
-def read_url_file(filename):
+def read_file(filename):
     try:
         file = open(filename, 'r')
         Lines = file.readlines()
