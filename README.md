@@ -2,7 +2,7 @@
 - Python 3.7 or higher
 
 # Installation:
-- best scenario is to use Anaconda.
+- best scenario is to use Anaconda with PyCharm.
 - create virtual environment using Anaconda or manually using venv library.
 - if using PyCharm(kernel/venv setup) with Anaconda:
   - File -> Settings -> Project -> Python Interpreter -> (gear) -> Add -> Conda Environment -> use existing and select your created conda env.
