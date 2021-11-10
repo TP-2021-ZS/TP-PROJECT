@@ -6,9 +6,9 @@
 - create virtual environment using Anaconda or manually using venv library.
 - if using PyCharm(kernel/venv setup) with Anaconda:
   - File -> Settings -> Project -> Python Interpreter -> (gear) -> Add -> Conda Environment -> use existing and select your created conda env.
-  - Add configuration(top panel) -> Add -> Python -> choose 'Python interpreter'(virtual environment you just created) -> choose 'Script path'(script that u want to run).
 - if using PyCharm(kernel/venv setup) with venv:
   - File -> Settings -> Project -> Python Interpreter -> (gear) -> Add -> Virtual Environment -> use existing and select your created venv.
+- Add configuration(top panel) -> Add -> Python -> choose 'Python interpreter'(virtual environment you just created) -> choose 'Script path'(script that u want to run).
 - In terminal run 'pip install -r requirements.txt' in order to install libraries.
 
 Regarding any questions about setup contact Andrej.
