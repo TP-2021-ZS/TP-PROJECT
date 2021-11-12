@@ -1,37 +1,23 @@
-import requests
-from Scoring.score import score
-from Data.sources import read_file
-from bs4 import BeautifulSoup
-from googlesearch import search
+from Process.crawler import get_urls_known_source
+from Process.crawler import get_urls_random_source
+from Data.data_processor import write_array_to_file
+from Data.data_processor import read_file
+from Process.parser import scrape
+from Process.parser import tags_to_string
+
 
 TAGS = ['p', 'h1', 'h2', 'h3']
 urls = read_file('urls.txt')
 keywords = read_file('keywords.txt')
 
 
-def scrape(source_url):
-    response = requests.get(source_url)
-    soup = BeautifulSoup(response.content, 'html.parser')
-    content = soup.find_all(TAGS)
-    return content
+write_array_to_file(get_urls_known_source(urls, keywords), "known.txt")
+write_array_to_file(get_urls_random_source(20, keywords), "random.txt")
 
 
-def tags_to_string(tags):
-    strippedTags = ''
-    for tag in tags:
-        for descen in tag.descendants:
-            strippedTags += str(descen.string)
-            strippedTags += ' '
-    return strippedTags
+#scraped_html_content = scrape(urls[0], TAGS)
+#text_content = tags_to_string(scraped_html_content)
 
 
-scraped = scrape(urls[0])
-text_content = tags_to_string(scraped)
-
-#article_score = score(text_content, keywords)
-#print(article_score)
-
-query = 'intitle:"investíciu"'
-
-for i in search(query, tld="sk", num=10, stop=10, pause=2):
-    print(i)
+# article_score = score(text_content, keywords)
+# print(article_score)
