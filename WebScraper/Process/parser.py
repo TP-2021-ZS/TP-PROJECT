@@ -13,6 +13,6 @@ def tags_to_string(text):
     strippedTags = ''
     for tag in text:
         for descen in tag.descendants:
-            strippedTags += str(descen.string)
+            strippedTags += str(descen.string).strip()
             strippedTags += ' '
     return strippedTags
