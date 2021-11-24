@@ -1,5 +1,6 @@
 import nltk
 import pandas as pd
+
 from WebProcessingUtils.WebScrubber import WebScrubber
 
 
@@ -30,8 +31,58 @@ class WebProcessor:
 
     def __create_tokens(self, string: str) -> list:
         tokens = [t for t in string.split()]
-        stopwords = ['a', 'sa', 'si', 'ale', 'alebo', 'u', 'aj', 'lebo', 'na', 'o', 'v', 'pri', 'za', 'pred', 's', 'so',
-                     'od', 'do']
+        stopwords = ['z', 'zo', 'v', 'vo', 'za', 'do', 'popod', 'poza', 'ponad', 'okolo', 'dolu', 'dolem hore', 'vôkol',
+                     'uprostred', 'vďaka', 'spoza', 'pomedzi', 'namiesto', 'bez', 'miesto', 'mimo', 'od', 'odo',
+                     'okrem', 'prostred', 'spod', 'sponad', 'spomedzi', 'k', 'ku', 'kvôli', 'napriek', 'naproti',
+                     'proti', 'voči', 'cez', 'medzi', 'na', 'nad', 'o', 'po', 'pod', 'popod', 'pre', 'pred', 'skrz',
+                     'na', 'popri', 'pri', 's', 'so', 'nado', 'bez', 'bezo', 'mimo', 'a', 'i', 'ani', 'jednak', 'hneď',
+                     'ako', 'aj', 'ba', 'dokonca', 'nielen', 'ale', 'avšak', 'však', 'síce', 'alebo', 'buď', 'veď',
+                     'totiž', 'keďže', 'pretože', 'že', 'keďže', 'aby', 'až', 'takže', 'ak', 'keby', 'keď', 'síce',
+                     'hoci', 'sotva', 'až', 'kým', 'akoby', 'keby', 'ako', 'tým', 'tak', 'ibaže', 'iba', 'by', 'tu',
+                     'tam', 'či', 'čo', 'a', 'ty', 'on', 'ona', 'ono', 'my', 'vy', 'oni', 'ony', 'môj', 'tvoj',
+                     'jeho/jej', 'náš', 'váš', 'ich', 'moje', 'tvoje', 'naše', 'vaše', 'moja', 'tvoja', 'naša', 'vaša',
+                     'mojich', 'tvojich', 'vašich', 'našich', 'mojimi', 'tvojimi', 'vašimi', 'našimi', 'sem', 'sa',
+                     'svoj', 'seba', 'tá', 'to', 'tento', 'toto', 'kto', 'čo', 'koho', 'čoho', 'komu', 'čomu', 'kým',
+                     'čím', 'kde', 'kedy', 'týmito', 'hentí', 'hentá', 'henten', 'hento', 'nikto', 'nikde', 'každý',
+                     'každí', 'sám', 'nič', 'každým', 'každom', 'každého', 'každými', 'každých', 'každopádne', 'niekto',
+                     'niekde', 'mojej', 'tvojej', 'našej', 'vašej', 'mňa', 'ju', 'jeho', 'vás', 'ich', 'tých',
+                     'tamtých', 'tamtie', 'tamtoho', 'nás', 'nami', 'tebou', 'tebe', 'nej', 'im', 'čím', 'čiou', 'tie',
+                     'tí', 'ktorýsi', 'ktorási', 'ktorési', 'bez ktoréhosi', 'bez ktorejsi', 'ktoréhosi',
+                     'dám ktorémusi', 'dám ktorejsi', 'dám ktorémusi', 'vidím ktorési', 'ktorúsi', 'ktorési',
+                     'ktoromsi', 'ktorejsi', 'ktoromsi', 'ktorýmsi', 'ktorousi', 'ktorýmsi', 'kadejaký', 'kadejako',
+                     'kadejakými', 'kadejakí', 'kadečo', 'kadečom', 'ktorísi', 'ktorési', 'ktorési', 'ktorýchsi',
+                     'ktorýmisi', 'čísi', 'čiasi', 'čiesi', 'čiehosi', 'čejsi', 'čiehosi', 'čiemusi', 'čejsi',
+                     'čiehosi', 'čiusi', 'čomsi', 'čísi', 'čiesi', 'číchsi', 'číchsi', 'čímisi', 'lenže', 'lebo', 'nuž',
+                     'ostatne', 'aspoň', 'prosím', 'bodaj', 'by', 'azda', 'až', 'ešte', 'aj', 'dokopy', 'napríklad',
+                     'asi', 'božechráň', 'sotva', 'áno', 'práve', 'jedine', 'jediná', 'jediný', 'jedinou', 'jediným',
+                     'jedinými', 'jediných', 'ma', 'je', 'a', 'ach', 'jaj', 'joj', 'ó', 'au', 'fuj', 'haha', 'hehe',
+                     'hihi', 'haló', 'aha', 'hej', 'hľa', 'pst', 'nate', 'hijo', 'ahoj', 'čau', 'pá', 'servus,zbohom',
+                     'beda', 'mu', 'seba', 'sa', 'kto', 'čo', 'kde', 'ako', 'prečo', 'koľko', 'koľkonásobný', 'to',
+                     'takto', 'vtedy', 'preto', 'toľko', 'toľkonásobný', 'niekto', 'voľačo', 'dakde', 'hocikam',
+                     'sotvačo', 'málokedy', 'podaktorí', 'zriedkakedy', 'ktoviekam', 'komusi', 'akokoľvek', 'sotvaký',
+                     'bohviekam', 'kadiaľ', 'bohviekadiaľ', 'máločo', 'málokde', 'istý', 'iný', 'taký', 'inakší',
+                     'tamže', 'inde', 'inam', 'toľko', 'isto', 'inak', 'takže', 'ináč', 'všetci', 'všade', 'vždy',
+                     'nikdy', 'všetko', 'každý', 'žiaden', 'nijako', 'ničí', 'sám', 'samý', 'samé', 'samého', 'samých',
+                     'sami', 'čia', 'čohosi', 'si', 'sebou', 'sebe', 'ktorý', 'aký', 'ktorým', 'akým', 'ktorí', 'akí',
+                     'ktorých', 'akých', 'ktorými', 'akými', 'istý', 'tým', 'istým', 'tí', 'istí', 'tých', 'istých',
+                     'tými', 'istými', 'ten', 'tebe', 'teba', 'jemu', 'tomu', 'komusi', 'nikomu', 'nikom', 'nikoho',
+                     'všetkým', 'všetkých', 'všetkými', 'viacerými', 'viacerých', 'čí', 'dačí', 'ničí', 'hocikde',
+                     'kedysi', 'predtým', 'akému', 'takému', 'dajakému', 'nijakému', 'nijakým', 'dajakým', 'takým',
+                     'nejako', 'niečo', 'toľko', 'ktoviekoľko', 'koľkokrát', 'toľkokrát', 'niekoľkokrát', 'nikdy',
+                     'koľký', 'raz', 'toľký', 'niekoľký', 'niekoľká', 'niekoľké', 'nikoľkí', 'niekoľkými', 'niekoľkých',
+                     'nikeoľkým', 'tade', 'tadiaľ', 'odtiaľ', 'odtadiaľ', 'potiaľ', 'potiaľto', 'žiadny', 'žiadna',
+                     'žiadne', 'žiadnymi', 'žiadnym', 'žiadnej', 'žiadných', 'mi', 'ten', 'tento', 'tamten', 'onen',
+                     'taký', 'onak', 'hentaký', 'hentakí', 'akiste', 'istotne', 'zrejme', 'určite', 'isto', 'naisto',
+                     'bezpochyby', 'bezpochybne', 'hlavne', 'najmä', 'len', 'popravde', 'zvlášť', 'že', 'zasa', 'zas',
+                     'zase', 'znova', 'znovu', 'žebože', 'žeby', 'žiaľ', 'ktorá', 'ktorej', 'ktorou', 'celkom', 'čisto',
+                     'čoskoro', 'dobre', 'doslovne', 'fakticky', 'iste', 'jednako', 'jednoducho', 'konečne', 'menovite',
+                     'najskorej', 'najskôr', 'nakoniec', 'koncu', 'naopak', 'napokon', 'napospol', 'nepochybne',
+                     'nesporne', 'nevyhnutne', 'podobne', 'práve', 'priamo', 'proste', 'rovno', 'rozhodne', 'skoro',
+                     'skôr', 'skutočne', 'určite', 'vcelku', 'vlastne', 'zvlášť', 'kdeže', 'potom', 'takisto',
+                     'doslova', 'dočista', 'vskutku', 'bezmála', 'napodiv', 'podistým', 'preboha', 'takzvaný', 'tzv.',
+                     'takzvaná', 'takzvané', 'takzvanými', 'takzvaných', 'takzvaným', 'takzvanej', 'takzvanému',
+                     'takzvaného', 'takzvanú', 'inokedy', 'čomusi', 'dakto', 'dačo', 'dajaký', 'niečí', 'voľakto',
+                     'ktokoľvek', 'razy', 'ktože', 'nadomnou']
 
         # clean tokens
         clean_tokens = []
