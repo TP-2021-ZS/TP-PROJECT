@@ -17,3 +17,12 @@ Regarding any questions about setup contact Andrej.
 - If you start using pip package manager, use only pip.
 - If you start using conda package manager, use only conda.
 - If you start using both, it can lead to lots of pain, anger and misery. May result in hard headache, because it can fck up your environment.
+
+# ElasticSearch and Kibana local setup
+1. Download elasticsearch and kibana from:
+- https://www.elastic.co/downloads/elasticsearch
+- https://www.elastic.co/downloads/kibana
+2. unzip folders and run .bat files in bin folders
+
+Kibana: http://localhost:5601/
+ElasticSearch: http://localhost:9200/ 

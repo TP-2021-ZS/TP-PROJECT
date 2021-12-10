@@ -9,6 +9,7 @@ class WebProcessor:
         self.scrubber = WebScrubber()
         self.export_folder = export_folder
         self.export_format = export_format
+        self.dataframes = {}
 
     def process_url(self, url) -> None:
         soup = self.scrubber.get_web_page_soup(url)
@@ -19,19 +20,19 @@ class WebProcessor:
         content = self.scrubber.get_string_by_tags(soup, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'title', 'p'])
 
         # Create DataFrames
-        dataframes = {
+        self.dataframes = {
             'titles': self.__create_dataset(titles),
             'paragraphs': self.__create_dataset(paragraphs),
             'content': self.__create_dataset(content)
         }
 
         # Export DataFrames
-        self.__export(dataframes, url)
+        self.__export(self.dataframes, url)
         print("Successfully processed: {}".format(url))
 
     def __create_tokens(self, string: str) -> list:
         tokens = [t for t in string.split()]
-        stopwords = ['z', 'zo', 'v', 'vo', 'za', 'do', 'popod', 'poza', 'ponad', 'okolo', 'dolu', 'dolem hore', 'vôkol',
+        stopwords = ['none','z', 'zo', 'v', 'vo', 'za', 'do', 'popod', 'poza', 'ponad', 'okolo', 'dolu', 'dolem hore', 'vôkol',
                      'uprostred', 'vďaka', 'spoza', 'pomedzi', 'namiesto', 'bez', 'miesto', 'mimo', 'od', 'odo',
                      'okrem', 'prostred', 'spod', 'sponad', 'spomedzi', 'k', 'ku', 'kvôli', 'napriek', 'naproti',
                      'proti', 'voči', 'cez', 'medzi', 'na', 'nad', 'o', 'po', 'pod', 'popod', 'pre', 'pred', 'skrz',
