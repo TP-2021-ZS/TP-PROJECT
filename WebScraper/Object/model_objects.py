@@ -27,19 +27,23 @@ class ScoringResult:
 
 @dataclass
 class ProjectSettings:
-    """Class for keeping track of scoring results."""
+    """Class for program settings."""
     tags: list
     keywords: list
     known_urls: list
+    blacklist_urls: list
     date_after: str
     get_urls_random: int = 0
     get_urls_known: int = 0
+    top_articles_num: int = 20
 
     def __init__(self, file: str):
         conf = read_conf(file)
         self.tags = conf['tags']
         self.keywords = conf['keywords']
         self.known_urls = conf['known_urls']
+        self.blacklist_urls = conf['blacklist_urls']
         self.date_after = conf['date_after']
         self.get_urls_random = conf['get_urls_random']
         self.get_urls_known = conf['get_urls_known']
+        self.top_articles_num = conf['top_articles_num']

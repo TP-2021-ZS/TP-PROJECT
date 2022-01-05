@@ -9,20 +9,25 @@ from Process.score import score
 from settings import settings
 import pandas as pd
 
+""" INIT - read settings """
 keywords = read_file(settings.keywords)
 known_urls = read_file(settings.known_urls)
+blacklist_urls = read_file(settings.blacklist_urls)
 
-#articles_random = get_urls_random_source(50, keywords)
-#articles_known = get_urls_known_source(known_urls, keywords)
+""" GET ARTICLES URLS """
+articles_known = get_urls_known_source(settings.get_urls_known, known_urls, keywords, settings.date_after)
+articles_random = get_urls_random_source(settings.get_urls_random, keywords, settings.date_after, blacklist_urls)
 
-#write_array_to_file(articles_random, "random.txt")
-#write_array_to_file(articles_known, "known.txt")
+""" SAVE URLS TO FILE [Temporary] """
+write_array_to_file(articles_known, "known.txt")
+write_array_to_file(articles_random, "random.txt")
 
+""" ARRAY OF ALL FETCHED ARTICLES URLS """
 urls = read_file("random.txt")
 for link in read_file("known.txt"):
     urls.append(link)
 
-
+""" PARSE AND SCORE ARTICLES """
 result_list = []
 for url in urls:
     try:
@@ -33,8 +38,8 @@ for url in urls:
     except Exception as e:
         print(e)
 
-
+""" SAVE RESULT AS DATAFRAME """
 df = pd.DataFrame([o.__dict__() for o in result_list])
-df.to_csv("C:\\Users\\42194\\Desktop\\7-semester\\TP\\WebScraper\\Files\\df.csv", encoding='utf-8-sig')
+df.to_csv("C:\\Users\\42194\\Desktop\\TP\\WebScraper\\Files\\report.csv", encoding='utf-8-sig')
 print(df)
 

@@ -1,4 +1,5 @@
 import requests
+import re
 from bs4 import BeautifulSoup
 
 
@@ -16,3 +17,4 @@ def tags_to_string(text):
             strippedTags += str(descen.string).strip()
             strippedTags += ' '
     return strippedTags
+
