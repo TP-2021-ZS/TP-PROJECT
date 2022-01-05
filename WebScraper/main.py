@@ -15,15 +15,15 @@ known_urls = read_file(settings.known_urls)
 blacklist_urls = read_file(settings.blacklist_urls)
 
 """ GET ARTICLES URLS """
-articles_known = get_urls_known_source(settings.get_urls_known, known_urls, keywords, settings.date_after)
-articles_random = get_urls_random_source(settings.get_urls_random, keywords, settings.date_after, blacklist_urls)
+#articles_known = get_urls_known_source(settings.get_urls_known, known_urls, keywords, settings.date_after)
+#articles_random = get_urls_random_source(settings.get_urls_random, keywords, settings.date_after, blacklist_urls)
 
 """ SAVE URLS TO FILE [Temporary] """
-write_array_to_file(articles_known, "known.txt")
-write_array_to_file(articles_random, "random.txt")
+#write_array_to_file(articles_known, "known.txt")
+#write_array_to_file(articles_random, "random.txt")
 
 """ ARRAY OF ALL FETCHED ARTICLES URLS """
-urls = read_file("random.txt")
+urls = read_file("examples.txt")
 for link in read_file("known.txt"):
     urls.append(link)
 
