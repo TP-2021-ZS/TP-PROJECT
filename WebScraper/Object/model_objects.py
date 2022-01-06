@@ -1,17 +1,23 @@
+import datetime
 from dataclasses import dataclass
+from hashlib import md5
 from Data.data_processor import read_conf
 
 
 @dataclass
 class ScoringResult:
     """Class for keeping track of scoring results."""
+    id: str
     url: str
     article: str
+    timestamp: datetime.datetime
     score: int = 0
 
     def __init__(self, url: str, article: str, score: int = 0):
+        self.id = md5(url.encode()).hexdigest()
         self.url = url
         self.article = article
+        self.timestamp = datetime.datetime.now()
         self.score = score
 
     def __str__(self):
@@ -19,11 +25,12 @@ class ScoringResult:
 
     def __dict__(self):
         return {
+            'id': self.id,
             'url': self.url,
             'article': self.article,
+            'timestamp': self.timestamp,
             'score': self.score
         }
-
 
 @dataclass
 class ProjectSettings:

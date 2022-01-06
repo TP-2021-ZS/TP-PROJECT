@@ -31,7 +31,7 @@ def crawl(query, num_of_articles):
     urls_list = []
 
     try:
-        for i in search(query, tld="sk", lang="sk", tbs="qdr:m", num=5, stop=5, pause=50,
+        for i in search(query, tld="sk", lang="sk", tbs="qdr:y", num=5, stop=5, pause=50,
                         user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 ("
                                    "KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1"):
             print("<appending_content>")
@@ -49,14 +49,14 @@ def build_queries(keywords_search):
     """ IN TITLE QUERIES """
     for i in range(0, 5):
         query = "intitle:" + keywords_search[random.randrange(0, end)].strip() + ","\
-                + keywords_search[random.randrange(0, end)].strip()
+                + keywords_search[random.randrange(0, end)].strip() + " -file"
         queries.append(query)
 
     """ IN TEXT QUERIES"""
     for i in range(0, 5):
         query = "intext:" + keywords_search[random.randrange(0, end)].strip() + ","\
                 + keywords_search[random.randrange(0, end)].strip() +\
-                "," + keywords_search[random.randrange(0, end)].strip()
+                "," + keywords_search[random.randrange(0, end)].strip() + " -file"
         queries.append(query)
 
     return queries
