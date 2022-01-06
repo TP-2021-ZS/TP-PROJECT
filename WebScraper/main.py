@@ -10,20 +10,21 @@ from settings import settings
 import pandas as pd
 
 """ INIT - read settings """
-keywords = read_file(settings.keywords)
+keywords_scoring = read_file(settings.keywords_scoring)
+keywords_search = read_file(settings.keywords_search)
 known_urls = read_file(settings.known_urls)
 blacklist_urls = read_file(settings.blacklist_urls)
 
 """ GET ARTICLES URLS """
 #articles_known = get_urls_known_source(settings.get_urls_known, known_urls, keywords, settings.date_after)
-#articles_random = get_urls_random_source(settings.get_urls_random, keywords, settings.date_after, blacklist_urls)
+articles_random = get_urls_random_source(settings.get_urls_random, keywords_search, blacklist_urls)
 
 """ SAVE URLS TO FILE [Temporary] """
 #write_array_to_file(articles_known, "known.txt")
-#write_array_to_file(articles_random, "random.txt")
+write_array_to_file(articles_random, "random.txt")
 
 """ ARRAY OF ALL FETCHED ARTICLES URLS """
-urls = read_file("examples.txt")
+urls = read_file("random.txt")
 for link in read_file("known.txt"):
     urls.append(link)
 
@@ -33,7 +34,7 @@ for url in urls:
     try:
         scraped_html_content = scrape(url.strip(), settings.tags)
         text_content = tags_to_string(scraped_html_content)
-        result = score(url.strip(), text_content, keywords)
+        result = score(url.strip(), text_content, keywords_scoring)
         result_list.append(result)
     except Exception as e:
         print(e)

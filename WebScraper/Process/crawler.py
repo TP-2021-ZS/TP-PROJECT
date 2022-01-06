@@ -15,21 +15,22 @@ def get_urls_known_source(num_urls, known_pages_list, keywords, date):
     return urls_list
 
 
-def get_urls_random_source(num_urls, keywords, date, blacklisted_urls):
+def get_urls_random_source(num_urls, keywords_search, blacklisted_urls):
     result = []
     print("<crawling_RANDOM_urls>")
-    query = "intitle:investíciu"  # & after:2021-10-01 for datetime boundary
-    for item in crawl(query, num_urls):
-        if blacklist_check(blacklisted_urls, item):
-            result.append(item)
+    queries = build_queries(keywords_search)
+    for query in queries:
+        for item in crawl(query, num_urls):
+            if blacklist_check(blacklisted_urls, item):
+                result.append(item)
     return result
 
 
-def crawl(query, num_of_pages):
+def crawl(query, num_of_articles):
     urls_list = []
 
     try:
-        for i in search(query, tld="sk", lang="sk", tbs="qdr:m", num=num_of_pages, stop=num_of_pages, pause=10,
+        for i in search(query, tld="sk", lang="sk", tbs="qdr:m", num=5, stop=5, pause=50,
                         user_agent="Mozilla/5.0 (iPhone; CPU iPhone OS 12_2 like Mac OS X) AppleWebKit/605.1.15 ("
                                    "KHTML, like Gecko) Version/12.1 Mobile/15E148 Safari/604.1"):
             print("<appending_content>")
@@ -40,9 +41,17 @@ def crawl(query, num_of_pages):
     return urls_list
 
 
+def build_queries():
+    queries = []
+    """ IN TITLE QUERIES """
+    query = "intitle:investíciu"
+    """ IN TEXT QUERIES"""
+    return queries
+
+
 def blacklist_check(blacklisted_urls, url):
     for blk_url in blacklisted_urls:
-        x = re.search(blk_url, url)
-        if x is None:
+        x = re.search(blk_url.strip(), url)
+        if x is not None:
             return False
     return True

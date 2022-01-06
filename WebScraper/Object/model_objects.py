@@ -29,7 +29,8 @@ class ScoringResult:
 class ProjectSettings:
     """Class for program settings."""
     tags: list
-    keywords: list
+    keywords_scoring: list
+    keywords_search: list
     known_urls: list
     blacklist_urls: list
     date_after: str
@@ -40,7 +41,8 @@ class ProjectSettings:
     def __init__(self, file: str):
         conf = read_conf(file)
         self.tags = conf['tags']
-        self.keywords = conf['keywords']
+        self.keywords_scoring = conf['keywords_scoring']
+        self.keywords_search = conf['keywords_search']
         self.known_urls = conf['known_urls']
         self.blacklist_urls = conf['blacklist_urls']
         self.date_after = conf['date_after']
