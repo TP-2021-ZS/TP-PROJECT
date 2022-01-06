@@ -1,3 +1,4 @@
+import random
 import time
 from googlesearch import search
 import re
@@ -41,11 +42,23 @@ def crawl(query, num_of_articles):
     return urls_list
 
 
-def build_queries():
+def build_queries(keywords_search):
     queries = []
+    end = len(keywords_search)
+
     """ IN TITLE QUERIES """
-    query = "intitle:investíciu"
+    for i in range(0, 5):
+        query = "intitle:" + keywords_search[random.randrange(0, end)].strip() + ","\
+                + keywords_search[random.randrange(0, end)].strip()
+        queries.append(query)
+
     """ IN TEXT QUERIES"""
+    for i in range(0, 5):
+        query = "intext:" + keywords_search[random.randrange(0, end)].strip() + ","\
+                + keywords_search[random.randrange(0, end)].strip() +\
+                "," + keywords_search[random.randrange(0, end)].strip()
+        queries.append(query)
+
     return queries
 
 
