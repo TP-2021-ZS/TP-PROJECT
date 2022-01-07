@@ -1,5 +1,7 @@
 import csv
 import json
+import publicsuffix2
+from urllib.parse import urlparse
 
 
 def save_results_to_csv(results_list):
@@ -32,4 +34,10 @@ def read_conf(file):
     f = open(file, "r")
     settings_dict = json.loads(f.read())
     return settings_dict
+
+
+def get_root_domain(url):
+    psl = publicsuffix2.fetch()
+    hostname = urlparse(url).hostname
+    return publicsuffix2.get_public_suffix(hostname, psl)
 

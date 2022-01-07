@@ -2,6 +2,7 @@ import datetime
 from dataclasses import dataclass
 from hashlib import md5
 from Data.data_processor import read_conf
+from Data.data_processor import get_root_domain
 
 
 @dataclass
@@ -10,6 +11,7 @@ class ScoringResult:
     id: str
     url: str
     article: str
+    root_domain: str
     timestamp: datetime.datetime
     score: int = 0
 
@@ -17,6 +19,7 @@ class ScoringResult:
         self.id = md5(url.encode()).hexdigest()
         self.url = url
         self.article = article
+        self.root_domain = get_root_domain(url)
         self.timestamp = datetime.datetime.now()
         self.score = score
 
@@ -28,9 +31,11 @@ class ScoringResult:
             'id': self.id,
             'url': self.url,
             'article': self.article,
+            'root_domain': self.root_domain,
             'timestamp': self.timestamp,
             'score': self.score
         }
+
 
 @dataclass
 class ProjectSettings:
