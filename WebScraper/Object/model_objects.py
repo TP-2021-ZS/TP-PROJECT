@@ -30,7 +30,6 @@ class ScoringResult:
         return {
             'id': self.id,
             'url': self.url,
-            'article': self.article,
             'root_domain': self.root_domain,
             'timestamp': self.timestamp,
             'score': self.score
@@ -45,7 +44,7 @@ class ProjectSettings:
     keywords_search: list
     known_urls: list
     blacklist_urls: list
-    date_after: str
+    time_range_of_search: str
     get_urls_random: int = 0
     get_urls_known: int = 0
     top_articles_num: int = 20
@@ -57,7 +56,7 @@ class ProjectSettings:
         self.keywords_search = conf['keywords_search']
         self.known_urls = conf['known_urls']
         self.blacklist_urls = conf['blacklist_urls']
-        self.date_after = conf['date_after']
+        self.time_range_of_search = conf['time_range_of_search']
         self.get_urls_random = conf['get_urls_random']
         self.get_urls_known = conf['get_urls_known']
         self.top_articles_num = conf['top_articles_num']

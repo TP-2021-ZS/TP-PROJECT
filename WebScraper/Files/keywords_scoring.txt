@@ -1,4 +1,4 @@
-invest
+invest,20
 ohlásil
 významn
 zahraničn
