@@ -1,7 +1,12 @@
 import csv
 import json
+import pandas as pd
 import publicsuffix2
 from urllib.parse import urlparse
+
+
+def get_scoring_dict(filename):
+    return pd.read_csv(filename, header=None, index_col=0, squeeze=True).to_dict()
 
 
 def save_results_to_csv(results_list):
@@ -40,4 +45,3 @@ def get_root_domain(url):
     psl = publicsuffix2.fetch()
     hostname = urlparse(url).hostname
     return publicsuffix2.get_public_suffix(hostname, psl)
-

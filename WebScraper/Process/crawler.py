@@ -4,22 +4,24 @@ from googlesearch import search
 import re
 
 
-def get_urls_known_source(num_urls, known_pages_list, keywords, date):
-    urls_list = []
+"""def get_urls_known_source(num_urls, num_queries, known_pages_list, blacklisted_urls, date):
+    results = []
     print("<crawling_KNOWN_urls>")
-    for page in known_pages_list:
-        query = "site:" + page.strip() + " intitle:investícia"
-        print("<crawling_page_" + str(page.strip()) + ">")
+    queries = build_queries(keywords_search, num_queries)
+    for query in queries:
         for item in crawl(query, num_urls):
-            urls_list.append(item)
+            if blacklist_check(blacklisted_urls, item):
+                result.append(item)
+    return result
 
-    return urls_list
+    return results
+"""
 
 
-def get_urls_random_source(num_urls, keywords_search, blacklisted_urls):
+def get_urls_random_source(num_urls, num_queries,  kw_search_cont, kw_search_title, blacklisted_urls, date_after):
     result = []
     print("<crawling_RANDOM_urls>")
-    queries = build_queries(keywords_search)
+    queries = build_queries(kw_search_cont, kw_search_title, num_queries, date_after)
     for query in queries:
         for item in crawl(query, num_urls):
             if blacklist_check(blacklisted_urls, item):
@@ -27,11 +29,11 @@ def get_urls_random_source(num_urls, keywords_search, blacklisted_urls):
     return result
 
 
-def crawl(query, num_of_articles):
+def crawl(query, num_urls):
     urls_list = []
 
     try:
-        for i in search(query, tld="sk", lang="sk", tbs="qdr:d", num=3, stop=3, pause=50,
+        for i in search(query, tld="sk", lang="sk", num=num_urls, stop=num_urls, pause=50,
                         user_agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:98.0) Gecko/20100101 Firefox/98.0"):
             print("<appending_content>")
             urls_list.append(i)
@@ -41,21 +43,22 @@ def crawl(query, num_of_articles):
     return urls_list
 
 
-def build_queries(keywords_search):
+def build_queries(kw_search_content, kw_search_title, num_queries, date_after):
     queries = []
-    end = len(keywords_search)
+    end_content = len(kw_search_content)
+    end_title = len(kw_search_title)
 
     """ IN TITLE QUERIES """
-    for i in range(0, 10):
-        query = "intitle:" + keywords_search[random.randrange(0, end)].strip() + ","\
-                + keywords_search[random.randrange(0, end)].strip() + " -file"
+    for i in range(0, num_queries//2):
+        query = "intitle:" + kw_search_title[random.randrange(0, end_title)].strip() + ","\
+                + kw_search_title[random.randrange(0, end_title)].strip() + " -file" + " after:" + date_after
         queries.append(query)
 
     """ IN TEXT QUERIES"""
-    for i in range(0, 10):
-        query = "intext:" + keywords_search[random.randrange(0, end)].strip() + ","\
-                + keywords_search[random.randrange(0, end)].strip() +\
-                "," + keywords_search[random.randrange(0, end)].strip() + " -file"
+    for i in range(0, num_queries//2):
+        query = "intext:" + kw_search_content[random.randrange(0, end_content)].strip() + ","\
+                + kw_search_content[random.randrange(0, end_content)].strip() +\
+                "," + kw_search_content[random.randrange(0, end_content)].strip() + " -file" + " after:" + date_after
         queries.append(query)
 
     return queries
