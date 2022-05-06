@@ -6,7 +6,7 @@ from urllib.parse import urlparse
 
 
 def get_scoring_dict(filename):
-    return pd.read_csv(filename, header=None, index_col=0, squeeze=True).to_dict()
+    return pd.read_csv(filename, header=0, index_col=0).squeeze("columns").to_dict()
 
 
 def save_results_to_csv(results_list):

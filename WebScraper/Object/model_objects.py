@@ -47,9 +47,11 @@ class ProjectSettings:
     blacklist_urls: list
     list_of_recipients: list
     date_after: str
+    project_path: str
     num_of_random_queries: int = 20
     random_articles_per_query: int = 3
     known_articles_per_query: int = 2
+
 
     def __init__(self, file: str):
         conf = read_conf(file)
@@ -64,3 +66,4 @@ class ProjectSettings:
         self.known_articles_per_query = conf['known_articles_per_query']
         self.date_after = conf['date_after']
         self.list_of_recipients = conf['list_of_recipients']
+        self.project_path = conf['project_path']
