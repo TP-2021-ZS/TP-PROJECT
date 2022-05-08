@@ -1,3 +1,3 @@
 from Object.model_objects import ProjectSettings
 
-settings = ProjectSettings("Files\\settings.conf")
+settings = ProjectSettings("./Files/settings.conf")

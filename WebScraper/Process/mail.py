@@ -26,7 +26,7 @@ def send_mail_report(list_of_recipients, filename):
     message.attach(MIMEText(body, "plain"))
 
     # Open PDF file in binary mode
-    filename2 = "Reports\\" + filename
+    filename2 = "Reports/" + filename
     with open(filename2, "rb") as attachment:
         # Add file as application/octet-stream
         # Email client can usually download this automatically as attachment
