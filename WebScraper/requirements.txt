@@ -3,3 +3,4 @@ publicsuffix2~=2.20191221
 requests~=2.25.1
 beautifulsoup4~=4.9.3
 elasticsearch~=8.1.2
+google~=3.0.0
