@@ -52,7 +52,6 @@ class ProjectSettings:
     random_articles_per_query: int = 3
     known_articles_per_query: int = 2
 
-
     def __init__(self, file: str):
         conf = read_conf(file)
         self.tags = conf['tags']

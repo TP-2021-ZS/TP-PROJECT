@@ -1,5 +1,5 @@
 # This Python file uses the following encoding: utf-8
-#from Process.crawler import get_urls_known_source
+from Process.crawler import get_urls_known_source
 from Process.crawler import get_urls_random_source
 from Process.elastic import add_article
 from Process.score import score
@@ -17,7 +17,7 @@ try:
     check_logs_dir(project_path=settings.project_path)
 
     """LOGGING ERRORS"""
-    logging.basicConfig(filename=settings.project_path + '\\Logs\\runtime_errors.log', level=logging.DEBUG,
+    logging.basicConfig(filename=settings.project_path + '/Logs/runtime_errors.log', level=logging.DEBUG,
                         format='%(asctime)s %(levelname)s %(name)s %(message)s')
     logger = logging.getLogger(__name__)
 
@@ -34,7 +34,13 @@ try:
     project_path = settings.project_path
 
     """ GET ARTICLES URLS """
-    #articles_known = get_urls_known_source(settings.get_urls_known, known_urls, keywords_search)
+    #articles_known = get_urls_known_source(num_urls,
+    #                                       num_queries,
+    #                                       keywords_search_content,
+    #                                       keywords_search_title,
+    #                                       known_urls,
+    #                                       blacklist_urls,
+    #                                       date_after)
     articles_random = get_urls_random_source(num_urls,
                                              num_queries,
                                              keywords_search_content,
@@ -42,8 +48,8 @@ try:
                                              blacklist_urls,
                                              date_after)
 
-
     """ PARSE AND SCORE *RANDOM* ARTICLES """
+    #found_urls = articles_known + articles_random
     result_list = []
     for url in articles_random:
         try:
@@ -58,13 +64,13 @@ try:
     filename = get_filename()
     df = pd.DataFrame([o.__dict__() for o in result_list])
     df = df.sort_values('score', ascending=False)
-    df.to_csv(project_path + "\\Reports\\" + filename, encoding='utf-8-sig')
+    df.to_csv(project_path + "/Reports/" + filename, encoding='utf-8-sig')
 
     """ SEND TO ELASTIC """
-    #add_article([o.__dict__() for o in result_list])
+    # add_article([o.__dict__() for o in result_list])
 
     """ SEND VIA EMAIL """
-    #send_mail_report(list_of_recipients, filename)
+    # send_mail_report(list_of_recipients, filename)
 
 except Exception as e:
     """LOGGING ERRORS"""
