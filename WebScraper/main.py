@@ -34,12 +34,13 @@ try:
     project_path = settings.project_path
 
     """ GET ARTICLES URLS """
-    articles_known = get_urls_known_source(num_urls,
-                                           num_queries,
-                                           keywords_search_content,
-                                           keywords_search_title,
-                                           blacklist_urls,
-                                           date_after)
+    #articles_known = get_urls_known_source(num_urls,
+    #                                       num_queries,
+    #                                       keywords_search_content,
+    #                                       keywords_search_title,
+    #                                       known_urls,
+    #                                       blacklist_urls,
+    #                                       date_after)
     articles_random = get_urls_random_source(num_urls,
                                              num_queries,
                                              keywords_search_content,
@@ -48,6 +49,7 @@ try:
                                              date_after)
 
     """ PARSE AND SCORE *RANDOM* ARTICLES """
+    #found_urls = articles_known + articles_random
     result_list = []
     for url in articles_random:
         try:
