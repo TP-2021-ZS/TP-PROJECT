@@ -1,15 +1,12 @@
 # This Python file uses the following encoding: utf-8
-from Process.crawler import get_urls_known_source
-from Process.crawler import get_urls_random_source
-from Process.elastic import add_article
-from Process.score import score
-from Process.parser import *
-from settings import settings
-import pandas as pd
-from Process.mail import send_mail_report
-from Process.helpers import *
 import logging
+
 from Data.data_processor import *
+from Process.crawler import get_urls_random_source
+from Process.helpers import *
+from Process.parser import *
+from Process.score import score
+from settings import settings
 
 try:
     """CREATE PROJECT FILES"""
@@ -30,7 +27,7 @@ try:
     list_of_recipients = settings.list_of_recipients
     num_urls = settings.random_articles_per_query
     num_queries = settings.num_of_random_queries
-    date_after = get_date_after(settings.date_after)
+    date_after = str(get_date_after(settings.date_after)).lower()
     project_path = settings.project_path
 
     """ GET ARTICLES URLS """
