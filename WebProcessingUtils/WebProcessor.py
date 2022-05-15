@@ -1,5 +1,6 @@
 import nltk
 import pandas as pd
+from fuzzywuzzy import fuzz as fw
 
 from WebProcessingUtils.WebScrubber import WebScrubber
 
@@ -10,13 +11,13 @@ class WebProcessor:
         self.export_folder = export_folder
         self.export_format = export_format
 
-    def process_url(self, url) -> None:
+    def process_url(self, url) -> str:
         soup = self.scrubber.get_web_page_soup(url)
 
         # Obtain texts
-        titles = self.scrubber.get_string_by_tags(soup, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'title'])
+        titles = self.scrubber.get_string_by_tags(soup, ['h1', 'title'])
         paragraphs = self.scrubber.get_string_by_tags(soup, ['p'])
-        content = self.scrubber.get_string_by_tags(soup, ['h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'title', 'p'])
+        content = self.scrubber.get_string_by_tags(soup, ['h1', 'title', 'p'])
 
         # Create DataFrames
         dataframes = {
@@ -26,8 +27,9 @@ class WebProcessor:
         }
 
         # Export DataFrames
-        self.__export(dataframes, url)
+        fn = self.__export(dataframes, url)
         print("Successfully processed: {}".format(url))
+        return fn
 
     def __create_tokens(self, string: str) -> list:
         tokens = [t for t in string.split()]
@@ -82,13 +84,28 @@ class WebProcessor:
                      'doslova', 'dočista', 'vskutku', 'bezmála', 'napodiv', 'podistým', 'preboha', 'takzvaný', 'tzv.',
                      'takzvaná', 'takzvané', 'takzvanými', 'takzvaných', 'takzvaným', 'takzvanej', 'takzvanému',
                      'takzvaného', 'takzvanú', 'inokedy', 'čomusi', 'dakto', 'dačo', 'dajaký', 'niečí', 'voľakto',
-                     'ktokoľvek', 'razy', 'ktože', 'nadomnou']
+                     'ktokoľvek', 'razy', 'ktože', 'nadomnou', 'none', 'null', 'sú', 'už', 'eho', 'nie', 'jej']
+        numbers = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9']
+        invalid_chars = ['"', '(', ')', '{', '}', '[', ']', '\'', '„', '“']
 
         # clean tokens
         clean_tokens = []
         for token in tokens:
+            # Check for numbers -> translate to standard decimal format
+            for n in numbers:
+                if n in token:
+                    token = token.replace(',', '')
+                    break
+
+            # Replace invalid chars
+            for ic in invalid_chars:
+                token = token.replace(ic, '')
+
+            # Check for stop words
             if token not in stopwords:
-                clean_tokens.append(token)
+                # Check for invalid information
+                if len(token) > 1 and not ('$' in token or '€' in token or '%' in token or token.isdigit()):
+                    clean_tokens.append(token)
 
         return clean_tokens
 
@@ -98,24 +115,34 @@ class WebProcessor:
         # create DF
         df = []
         for key, val in nltk.FreqDist(tokens).items():
-            df.append([key, val])
+            sim = False
+            for line in df:
+                if line[0][0:3] == key[0:3] and fw.ratio(line[0],
+                                                         key) >= 72:  # and fw.partial_ratio(line[0], key) >= 80:
+                    line[1] += val
+                    sim = True
+                    break
+
+            if not sim:
+                df.append([key, val])
 
         df = pd.DataFrame(data=df, columns=['word', 'count'])
         df.sort_values(by='count', ascending=False, inplace=True)
 
         return df
 
-    def __export(self, data_frames: dict, url: str) -> None:
+    def __export(self, data_frames: dict, url: str) -> str:
         stripped_url = url.replace('https://', '').replace('wwww.', '').split('?')[0].split('/')
-        file_name = "{}{}.{}".format(self.export_folder, stripped_url[0] + ' - ' + stripped_url[-2], self.export_format)
+        file_name = "{}.{}".format(stripped_url[0] + ' - ' + stripped_url[-2], self.export_format)
 
         if self.export_format == 'xlsx':
-            with pd.ExcelWriter(file_name) as writer:
+            with pd.ExcelWriter(self.export_folder + file_name) as writer:
                 for key, val in data_frames.items():
                     val.to_excel(writer, sheet_name=key, index=False)
         elif self.export_format == 'csv':
             for key, val in data_frames.items():
-                val.to_csv("{} - {}".format(file_name, key), index=False)
+                val.to_csv("{} - {}".format(self.export_folder + file_name, key), index=False)
         else:
             raise ValueError("Incorrect export format.")
 
+        return file_name

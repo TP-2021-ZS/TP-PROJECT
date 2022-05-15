@@ -33,7 +33,9 @@ class WebScrubber:
         return self.__sanitize_string(string_builder)
 
     def __sanitize_string(self, string: str) -> str:
-        return string.lower().replace(', ', ' ').replace(' , ', ' ').replace(' . ', ' ')
+        return string.lower().replace(', ', ' ').replace(' , ', ' ').replace(' . ', ' ').replace('. ', ' ').replace('?',
+                                                                                                                    '').replace(
+            '!', '').replace(':', '')
 
 
 #Example usage
